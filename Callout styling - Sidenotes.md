@@ -2,6 +2,17 @@ author: Huajin
 source: https://github.com/xhuajin/obsidian-sidenote-callout
 
 ---
+说明：
+* 使用 obsidian 自带的 callout 语法，不污染笔记，实现右侧批注。
+* 在编辑和阅读视图中效果一致。
+* 批注框可随显示窗口大小的调整自动适应。
+
+效果展示：
+
+![Callout_Sidenote](https://github.com/user-attachments/assets/0efb1853-2f04-49d5-a665-574d14ed1a51)
+
+
+代码：（使用方法见最底部）
 
 ```
 /*
