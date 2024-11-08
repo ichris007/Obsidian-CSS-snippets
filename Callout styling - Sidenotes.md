@@ -112,7 +112,7 @@ body {
   --line-width: var(--file-line-width, --line-width);
 }
 
-/* 只在页面有 "sidenote" 类名时生效 */
+/* 只在页面有 "sidenote" 类名时生效，去掉这段可实现全局 */
 .sidenote {
   --file-margins: 1% 30% var(--size-4-8) 5%; /* 四个数值时，依次表示“上 - 右 - 下 - 左”边距 */
 }
