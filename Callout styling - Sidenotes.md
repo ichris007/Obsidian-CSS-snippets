@@ -1,5 +1,5 @@
-author: Huajin
-source: https://github.com/xhuajin/obsidian-sidenote-callout
+* author: Huajin
+* source: https://github.com/xhuajin/obsidian-sidenote-callout
 
 ---
 说明：
@@ -114,7 +114,7 @@ body {
 
 /* 只在页面有 "sidenote" 类名时生效 */
 .sidenote {
-  --file-margins: 1% 30% var(--size-4-8) 5%; /* 栏宽，局部生效 */
+  --file-margins: 1% 30% var(--size-4-8) 5%; /* 四个数值时，依次表示“上 - 右 - 下 - 左”边距 */
 }
 
 .markdown-source-view.mod-cm6 .cm-content > .cm-callout:has(.callout[data-callout-metadata*="aside"])[contenteditable=false]  {
