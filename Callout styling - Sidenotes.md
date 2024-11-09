@@ -18,7 +18,8 @@
 /*
 author: Huajin
 reference: 
-  https://discord.com/channels/686053708261228577/702656734631821413/1155147566615367680  https://discord.com/channels/686053708261228577/702656734631821413/1073456247849881610
+  https://discord.com/channels/686053708261228577/702656734631821413/1155147566615367680
+  https://discord.com/channels/686053708261228577/702656734631821413/1073456247849881610
 */
 
 /* @settings
@@ -79,9 +80,9 @@ settings:
     description: The width of the sidenote
     description.zh: 边注的宽度
     type: variable-number-slider
-    default: 100
-    min: 20
-    max: 200
+    default: 200
+    min: 150
+    max: 300
     step: 10
     format: px
   -
@@ -104,17 +105,15 @@ settings:
     default: false
 */
 
-
 body {
-  --aside-width: 200px; 
-  /*--aside-width: 20%; /* 修改为相对宽度 */
+  --aside-width: 200px;
   --aside-offset: var(--size-4-4);
   --line-width: var(--file-line-width, --line-width);
 }
 
-/* 只在页面有 "sidenote" 类名时生效，去掉这段可实现全局 */
+/* 只在页面有 "sidenote" 类名时生效 */
 .sidenote {
-  --file-margins: 1% 30% var(--size-4-8) 5%; /* 四个数值时，依次表示“上 - 右 - 下 - 左”边距 */
+  --file-margins: 1% 30% var(--size-4-8) 5%; /* 栏宽，局部生效 */
 }
 
 .markdown-source-view.mod-cm6 .cm-content > .cm-callout:has(.callout[data-callout-metadata*="aside"])[contenteditable=false]  {
@@ -136,22 +135,36 @@ body {
 }
 
 .callout[data-callout-metadata*="aside"] {
-  /* --aside-offset: var(--size-4-4); */
-  position: relative;
+  position: absolute;
   width: 45%; /* 侧边框的右侧边用这个参数控制，否则右边就跑到屏幕之外了。45%这个数是调出来的*/
 }
 
-
-.callout[data-callout-metadata*="aside-l"] {
-  left: calc(-1 * (20% + var(--aside-offset))); /* 使用百分比 */
+/* .callout[data-callout-metadata*="aside-l"] {
+  left: calc(-1 * (var(--aside-width) + var(--aside-offset)));
   right: calc(100% + var(--aside-offset));
-}
+} */
 
 .callout[data-callout-metadata*="aside-r"] {
-  left: calc(100% + var(--aside-offset)); /* 可根据需要自行调整，左边框到正文的距离，也可以在Style Settings中通过滑块调整 */
-  right: calc(100% + var(--aside-width)); /* 好像是定义了width: 45%后，这个不起作用了，可以忽略 */
+  left: calc(100% + var(--aside-offset));
+  right: calc(100% + var(--aside-width));
 }
 
+.markdown-reading-view .callout[data-callout-metadata*="aside"] {
+  position: absolute;
+  width: 28%; /* 侧边框的右侧边用这个参数控制，否则右边就跑到屏幕之外了。28%这个数是调出来的*/
+}
+
+/* .markdown-reading-view .callout[data-callout-metadata*="aside-l"] {
+  left: calc(50vw - var(--file-line-width)/2 - var(--aside-width) - 2 * var(--aside-offset));
+  right: calc(50vw + var(--file-line-width)/2);
+}  */
+
+.markdown-reading-view .callout[data-callout-metadata*="aside-r"] {
+  /*left: calc(var(--file-line-width) + 2 * var(--aside-width));
+  /*right: calc(50vw - var(--file-line-width)/2 - var(--aside-width) - 2 *var(--aside-offset)); */
+  left: calc(61% + var(--aside-width));
+  right: calc(-1 * var(--aside-width));
+}   
 
 @media (hover: hover) {
   .markdown-source-view.mod-cm6 .cm-embed-block:has(> div > [data-callout-metadata*="aside"]):hover {
@@ -172,7 +185,6 @@ body {
   display: grid;
   background-color: var(--background-primary) !important;
   border: none;
-  font-size: 13px;/* 修改为所需的字体大小 */
 }
 
 .sidenote-backgound .callout[data-callout-metadata*="aside"] {
