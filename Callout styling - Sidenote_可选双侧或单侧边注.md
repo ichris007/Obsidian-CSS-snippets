@@ -1,11 +1,20 @@
 
-说明：
+## 说明
 * 使用obsidian自带的callout语法，不污染笔记，方便迁移及修改
 * 可以通过 `CSSClasses` 定义笔记是双侧边注，还是单侧边注（右侧或左侧）
 * 编辑模式、阅读模式效果一致
 * 边注框可随显示窗口大小的调整自适应
 * 当边注内容较多时，可用滚动查看（边注框高度可调，见代码注释）
 
+## 效果
+![边注1](https://github.com/user-attachments/assets/2983cf7b-33d0-4956-8522-128278241bcc)
+
+![边注2](https://github.com/user-attachments/assets/ec0abef2-3e20-45b8-be42-4dc5e7910f30)
+
+![边注3](https://github.com/user-attachments/assets/a238d32f-4d7d-4281-a10a-045959d006c1)
+
+
+## 代码
 
 ```css fold
 /* ----------------------------------------------------------Sidenote边注功能------------------------------------------------------------*/
@@ -196,9 +205,9 @@ body {
 
 .callout[data-callout-metadata*="aside-l"] {
   position: absolute; /* 绝对定位 */
-  right: calc(100% + 0.5 * var(--aside-offset)); /* 将右边距设置为动态调整*/
+  right: calc(100% + 0.4 * var(--aside-offset)); /* 将右边距设置为动态调整*/
   left: auto; /* 取消左侧边距约束 */
-  width: calc(33% - 0.4 * var(--aside-offset)); /* 使用变量控制宽度 */
+  width: calc(31% - 0.8 * var(--aside-offset)); /* 使用变量控制宽度 */
   max-width: 300px; /* 设定最大宽度，确保在小屏幕上不超出边界 */
   overflow: visible; /* 允许内容溢出 */
 }
@@ -207,23 +216,23 @@ body {
   position: absolute; /* 绝对定位 */
   left: calc(100% + 0.2 * var(--aside-offset));/* 将左边框设置为根据屏幕尺寸动态调整，并增加调整与左侧正文间距的变量 */
   right: auto;/* 取消右侧边距约束 */
-  width: calc(30% + 0.8 * var(--aside-offset)); /* 根据屏幕尺寸动态调整宽度 */
+  width: calc(31% + 0.8 * var(--aside-offset)); /* 根据屏幕尺寸动态调整宽度 */
   max-width: 300px; /* 设定最大宽度，确保在小屏幕上不超出边界 */
   overflow: visible;
 }
 
 .markdown-reading-view .callout[data-callout-metadata*="aside-l"] {
   position: absolute; /* 绝对定位 */
-  right: calc(80% + 0.2 * var(--aside-offset)); /* 将右边框设置为根据屏幕尺寸动态调整，并增加调整与右侧正文间距的变量*/
+  right: calc(79% + 1 * var(--aside-offset)); /* 将右边框设置为根据屏幕尺寸动态调整，并增加调整与右侧正文间距的变量*/
   left: auto; /* 取消左侧边距约束 */
-  width: calc(20% - 0.5 * var(--aside-offset)); /* 使用变量控制宽度 */
+  width: calc(20% - 1.7 * var(--aside-offset)); /* 使用变量控制宽度 */
   max-width: 350px; /* 设定最大宽度，确保在小屏幕上不超出边界 */
   overflow: visible; /* 允许内容溢出 */
 }
 
 .markdown-reading-view .callout[data-callout-metadata*="aside-r"] {
   position: absolute; /* 绝对定位 */
-  left: calc(80% + 0.1 * var(--aside-offset));/* 将左边距设置为根据屏幕尺寸动态调整，并增加调整与左侧正文间距的变量*/
+  left: calc(80% - 0.1 * var(--aside-offset));/* 将左边距设置为根据屏幕尺寸动态调整，并增加调整与左侧正文间距的变量*/
   right: auto;/* 取消右侧边距约束 */
   width: calc(20% - 0.6 * var(--aside-offset)); /* 使用变量控制宽度 */
   max-width: 350px; /* 设定最大宽度，确保在小屏幕上不超出边界 */
@@ -398,7 +407,7 @@ body:not(.top-sidenote-callout-title) .setting-item[data-id="top-right-sidenote-
 }
 ```
 
-使用方法
+## 使用方法
 
 添加好 css 后，在 `properties` 中添加 `CSSClasses` 赋值 `sidenote` 、 `sidenote-r` 、 `sidenote-r` ，然后在正文中直接用边注的 callout 即可。
 
@@ -432,12 +441,12 @@ body:not(.top-sidenote-callout-title) .setting-item[data-id="top-right-sidenote-
 
 * 布局调整
 	* `--file-margins: 1% 20% 1% 20%; ` 的值可以根据需要调整
-	* 当 `--file-margins` 的值调整时， `aside-l` 和 `aside-r` 的宽度 `width` 也需要调整（编辑、预览模式单独调整），可调整其中的百分数，使边注框宽度合适，否则边注内容容易被覆盖。
+	* 当 `--file-margins` 的值调整时， `aside-l` 和 `aside-r` 的宽度 `width` 也需要调整（编辑、预览模式单独调整），可调整其中的百分数，使边注框宽度合适，否则边注内容容易被覆盖。这里宽度和位置要多调几次，适合自己的布局。
 
 * 适配主题
 	* 目前只测试了Minimal，其它主题未知
 
-* 主意事项
+## 主意事项
 * 使用 contextual typography 插件且开启 blue topaz 主题中的首行缩进和两端对齐会有冲突（原作者备注，本CSS未测试）
 	* 解决办法：把 css 中 @media 上方那两段被注释的 css 去掉注释即可（把两段开头的 \/* 和结尾的 \*/ 去掉）
 - 边注的标题在侧边时不宜过长
