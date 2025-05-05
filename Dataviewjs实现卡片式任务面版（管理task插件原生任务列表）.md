@@ -138,3 +138,170 @@ Array.from(cardsContainer.children).forEach((c, i) => {
 });
 showTasks(currentIndex);
 ```
+## 卡片样式CSS代码
+```css
+/* ------ 卡片式任务面版样式 -----*/
+.dropdown-container {
+  margin-bottom: 1em;
+}
+
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 1px; /* 控制卡片左右间距 */
+  row-gap: 2px;     /* 控制卡片上下间距 */
+  margin: 1px 0px; 
+}
+
+.card {
+  background: var(--background-secondary);
+  border-radius: 4px; /* 12px */
+  box-shadow: var(--shadow-s); 
+  padding: 8px 0px; /*10px*/
+  margin: 0px 1px;
+  width: 60px;
+  height: 60px;
+  min-width: 45px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s ease; /* background 0.3s; */
+}
+
+.card:hover {
+  transform: scale(1.05);
+  background: #333;
+}
+
+.card .number {
+  font-size: 1em;
+  font-weight: bold;
+  margin-top: -7px;
+  padding-top: 0px;
+}
+
+.card .label {
+  font-size: 0.8em;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+
+.underline {
+  width: 36px;
+  height: 1.5px;
+  margin: 1px auto 0;
+  border-radius: 1px;
+}
+
+.task-list {
+  margin-top: 2px;
+  padding-top: 0px;
+  border-top: 1.5px solid #444;
+}
+
+.task-item {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+/* .cards-container .card.active {
+/*   border: 1px solid var(--text-accent); /*让激活卡片采用高亮边框*/
+/*  background-color: var(--background-secondary-alt); 
+/*   transform: scale(1.05);
+/* } */
+
+.cards-container .card.active {
+  background-color: var(--background-modifier-hover); /*var(--interactive-accent)：让激活卡片采用主题强调色背景。*/
+  color: white;
+}
+
+.cards-container .card.active .number,
+.cards-container .card.active .label {
+  color: white;
+}
+
+.cards-container .card.active .underline {
+  background-color: white;
+}
+```
+## 「首页」展示版
+对于想在首页作为任务管理展示用，可对代码进行精简，只展示任务分类和数量，而不展示具体的任务列表（没有任务交互功能），代码如下：
+```dataviewjs
+// ==== 1. 收集任务 ====
+let tasks1 = dv.pages('"01Projects"').file.tasks;
+let tasks2 = dv.pages('"02Business"').file.tasks;
+let tasks3 = dv.pages('"00Todolist"').file.tasks;
+let tasks4 = dv.pages('"07People"').file.tasks;
+let tasks5 = dv.pages('"00Journal"').file.tasks;
+
+let tasks = [...tasks1, ...tasks2, ...tasks3, ...tasks4, ...tasks5];
+
+let today = dv.date("today");
+let tomorrow = dv.date("tomorrow");
+let oneWeekLater = today.plus({ days: 6 });
+
+// ==== 2. 分类任务 ====
+let expiredTasks = tasks.filter(t => t.status === " " && (
+    (t.due && dv.date(t.due).toJSDate() < today.toJSDate()) ||
+    (t.scheduled && dv.date(t.scheduled).toJSDate() < today.toJSDate())
+));
+let ongoingTasks = tasks.filter(t => t.status === "/");
+let todoTasks = tasks.filter(t => t.status === " " && (!t.due && !t.scheduled));
+let todayTasks = tasks.filter(t => t.status === " " && (
+    (t.due && dv.date(t.due).toJSDate().toDateString() === today.toJSDate().toDateString()) ||
+    (t.scheduled && dv.date(t.scheduled).toJSDate().toDateString() === today.toJSDate().toDateString())
+));
+let tomorrowTasks = tasks.filter(t => t.status === " " && (
+    (t.due && dv.date(t.due).toJSDate().toDateString() === tomorrow.toJSDate().toDateString()) ||
+    (t.scheduled && dv.date(t.scheduled).toJSDate().toDateString() === tomorrow.toJSDate().toDateString())
+));
+let thisWeekTasks = tasks.filter(t => t.status === " " && (
+    (t.due && dv.date(t.due).toJSDate() > tomorrow.toJSDate() && dv.date(t.due).toJSDate() <= oneWeekLater.toJSDate()) ||
+    (t.scheduled && dv.date(t.scheduled).toJSDate() > tomorrow.toJSDate() && dv.date(t.scheduled).toJSDate() <= oneWeekLater.toJSDate())
+));
+let afterSevenDaysTasks = tasks.filter(t => t.status === " " && (
+    (t.due && dv.date(t.due).toJSDate() > oneWeekLater.toJSDate()) ||
+    (t.scheduled && dv.date(t.scheduled).toJSDate() > oneWeekLater.toJSDate())
+));
+let completedTasks = tasks.filter(t => t.status === "x");
+
+// ==== 3. 分类设置 ====
+const cardsContainer = document.createElement('div');
+cardsContainer.className = 'cards-container';
+
+let categories = [
+  { name: "逾期", tasks: expiredTasks, color: "#ff4c4c" },
+  { name: "进行中", tasks: ongoingTasks, color: "#4caf50" },
+  { name: "待办", tasks: todoTasks, color: "#ff9800" },
+  { name: "今天", tasks: todayTasks, color: "#ffffff" },
+  { name: "明天", tasks: tomorrowTasks, color: "#00bcd4" },
+  { name: "一周内", tasks: thisWeekTasks, color: "#8bc34a" },
+  { name: "未来", tasks: afterSevenDaysTasks, color: "#bbbbbb" },
+  { name: "已完成", tasks: completedTasks, color: "#9e9e9e" },
+];
+
+// 当前选中分类索引
+let currentIndex = -1;
+
+// 显示分类卡片
+categories.forEach((cat, index) => {
+  let card = cardsContainer.createDiv({cls: "card"});
+  let numberDiv = card.createDiv({cls: "number", text: String(cat.tasks.length)});
+  numberDiv.style.color = cat.color;
+  let labelDiv = card.createDiv({cls: "label", text: cat.name});
+  let underline = card.createDiv({cls: "underline"});
+  underline.style.backgroundColor = cat.color;
+
+  card.onclick = () => {
+    // 取消旧高亮
+    if (currentIndex !== -1) {
+      cardsContainer.children[currentIndex].classList.remove("active");
+    }
+    // 添加当前高亮
+    card.classList.add("active");
+    currentIndex = index;
+  };
+});
+
+dv.container.appendChild(cardsContainer);
+```
